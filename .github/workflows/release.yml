@@ -220,7 +220,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG:      ${{ steps.final.outputs.tag }}
           VERSION:  ${{ steps.final.outputs.version }}
-          SLUG:     code-block-enhancer
+          SLUG: coywolf-custom-blocks-php-templates
         run: |
           set -euo pipefail
           # Target the latest commit on main (the bump commit, if we just made one).
