@@ -4,7 +4,7 @@ Tags: blocks, custom blocks, php, templates
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,9 @@ disallows. This companion exists so the main plugin can be compliant
 while this capability remains available from GitHub.
 
 == Changelog ==
+
+= 1.0.1 =
+* Updater: run GitHub release checks in the background so the Updates screen never hangs (#3).
 
 = 1.0.0 =
 * Initial release: the PHP-template executor moved here from Coywolf Custom Blocks <= 1.0.69, hooked to the main plugin's coywolf_custom_blocks_execute_php_template filter. Same cache location, same trust model, same output.
