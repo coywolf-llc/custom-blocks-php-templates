@@ -3,7 +3,7 @@
  * Plugin Name: Coywolf Custom Blocks — PHP Templates
  * Plugin URI: https://github.com/coywolf-llc/custom-blocks-php-templates
  * Description: Companion for Coywolf Custom Blocks that executes PHP inside block templates. Distributed on GitHub only — executing PHP stored in the database is not permitted in the WordPress.org plugin directory.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Requires at least: 6.0
  * Requires PHP: 7.0
  * Author: Coywolf
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'COYWOLF_CCBPT_VERSION', '1.0.1' );
+define( 'COYWOLF_CCBPT_VERSION', '1.0.2' );
 define( 'COYWOLF_CCBPT_PLUGIN_FILE', __FILE__ );
 
 require_once __DIR__ . '/includes/class-github-updater.php';

@@ -4,7 +4,7 @@
 
 Companion for [Coywolf Custom Blocks](https://github.com/coywolf-llc/custom-blocks) that executes PHP inside block templates. Install it alongside the main plugin and any `<?php … ?>` in a block's Custom HTML or Preview HTML runs on the server at render time — exactly as it did when this mechanism was built into the main plugin (≤ 1.0.69).
 
-- **Version:** 1.0.1
+- **Version:** 1.0.2
 - **Requires WordPress:** 6.0 or later
 - **Requires PHP:** 7.0 or later
 - **Requires plugin:** Coywolf Custom Blocks 1.0.70 or later
@@ -45,6 +45,9 @@ No — executing database-stored PHP is precisely what the directory disallows. 
 No analytics, no tracking, no data gathering. The only outbound request is `GET api.github.com/repos/coywolf-llc/custom-blocks-php-templates/releases/latest` for update checks.
 
 ## Changelog
+
+### 1.0.2
+- Harden executor cache: direct-access guard + memoize cache dir (#4).
 
 ### 1.0.1
 - Updater: run GitHub release checks in the background so the Updates screen never hangs (#3).
