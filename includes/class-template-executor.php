@@ -43,6 +43,19 @@ final class Coywolf_CCBPT_Template_Executor {
 	const CACHE_TTL_DAYS = 30;
 
 	/**
+	 * Prepended to every compiled `tpl-*.php` file. When the file is
+	 * `include`d from within WordPress (ABSPATH defined) this is a no-op and
+	 * the template runs normally; if a web server that runs .php in uploads
+	 * (e.g. nginx, which ignores the directory's Apache .htaccess) serves the
+	 * file directly over HTTP, the request is refused before any template
+	 * code executes. Belt to the .htaccess/index.php braces and the
+	 * unguessable md5 filename.
+	 *
+	 * @var string
+	 */
+	const DIRECT_ACCESS_GUARD = "<?php if ( ! defined( 'ABSPATH' ) ) { http_response_code( 403 ); exit; } ?>\n";
+
+	/**
 	 * Register the executor on the parent plugin's filter.
 	 */
 	public function init() {
@@ -102,7 +115,7 @@ final class Coywolf_CCBPT_Template_Executor {
 			// lifetime without needing a cron event.
 			$this->maybe_prune_cache( $cache_dir );
 
-			if ( false === file_put_contents( $file, $content, LOCK_EX ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+			if ( false === file_put_contents( $file, self::DIRECT_ACCESS_GUARD . $content, LOCK_EX ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 				return $content;
 			}
 		}
@@ -164,16 +177,26 @@ final class Coywolf_CCBPT_Template_Executor {
 	 * @return string Absolute filesystem path, or '' on failure.
 	 */
 	protected function get_template_cache_dir() {
+		// Resolve once per request — a page with many PHP blocks would
+		// otherwise re-stat the same fixed directory on every render.
+		static $resolved = null;
+		if ( null !== $resolved ) {
+			return $resolved;
+		}
+
 		$uploads = wp_get_upload_dir();
 		if ( ! isset( $uploads['basedir'] ) || ! is_string( $uploads['basedir'] ) ) {
-			return '';
+			$resolved = '';
+			return $resolved;
 		}
 		$dir = rtrim( $uploads['basedir'], '/' ) . '/coywolf-custom-blocks/templates';
 		if ( file_exists( $dir ) ) {
-			return is_dir( $dir ) && wp_is_writable( $dir ) ? $dir : '';
+			$resolved = is_dir( $dir ) && wp_is_writable( $dir ) ? $dir : '';
+			return $resolved;
 		}
 		if ( ! wp_mkdir_p( $dir ) ) {
-			return '';
+			$resolved = '';
+			return $resolved;
 		}
 		// Drop a tiny .htaccess + index.php to make sure the directory
 		// isn't directly browsable and individual files aren't served
@@ -185,6 +208,7 @@ final class Coywolf_CCBPT_Template_Executor {
 		file_put_contents( $dir . '/.htaccess', "Order Deny,Allow\nDeny from all\n" );
 		file_put_contents( $dir . '/index.php', "<?php\n// Silence is golden.\n" );
 		// phpcs:enable
-		return $dir;
+		$resolved = $dir;
+		return $resolved;
 	}
 }
