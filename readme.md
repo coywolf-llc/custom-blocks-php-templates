@@ -1,56 +1,20 @@
-<img src=".wordpress-org/icon-256x256.png" alt="Coywolf plugin logo" width="128" />
+<img src=".wordpress-org/icon-256x256.png" alt="Coywolf Custom Blocks: PHP Templates logo" width="128" />
 
-# Coywolf Custom Blocks — PHP Templates
+# Coywolf Custom Blocks: PHP Templates
 
-Companion for [Coywolf Custom Blocks](https://github.com/coywolf-llc/custom-blocks) that executes PHP inside block templates. Install it alongside the main plugin and any `<?php … ?>` in a block's Custom HTML or Preview HTML runs on the server at render time — exactly as it did when this mechanism was built into the main plugin (≤ 1.0.69).
+> [!IMPORTANT]
+> Coywolf Custom Blocks: PHP Templates is no longer developed. Coywolf moved all of its sites from WordPress to [EmDash](https://emdashcms.com), and the plugin features it still uses are now in [Coywolf Pack for EmDash](https://github.com/coywolf-llc/coywolf-pack). This repository is archived and read-only.
 
-- **Version:** 1.0.2
-- **Requires WordPress:** 6.0 or later
-- **Requires PHP:** 7.0 or later
-- **Requires plugin:** Coywolf Custom Blocks 1.0.70 or later
-- **License:** [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html)
+## Use Coywolf Pack instead
 
-## Description
+Coywolf Pack doesn't include a block builder, so there's nothing for this companion to run in. The blocks Coywolf built with [Coywolf Custom Blocks](https://github.com/coywolf-llc/custom-blocks) are in Coywolf Pack's [Custom Blocks](https://github.com/coywolf-llc/coywolf-pack/blob/main/docs/custom-blocks.md) and [Reviews](https://github.com/coywolf-llc/coywolf-pack/blob/main/docs/reviews.md) modules.
 
-Coywolf Custom Blocks renders block templates authored in the WordPress admin. Templates written as plain HTML — including `{{field}}` substitution, `{{#if}}` / `{{#each}}` logic, scripts, and iframes — render through the main plugin alone. Templates containing PHP need this companion: the main plugin detects a PHP open tag in the admin-authored template and hands the substituted markup to this plugin's executor through the `coywolf_custom_blocks_execute_php_template` filter. Without the companion, those blocks render an explanatory HTML comment instead.
+To add Coywolf Pack to an EmDash site, follow its [Getting started](https://github.com/coywolf-llc/coywolf-pack#getting-started) guide.
 
-Why a separate plugin? The WordPress.org plugin directory forbids executing user-supplied code stored in the database, in any form. Splitting the executor out keeps the main plugin eligible for the directory while sites that want in-admin PHP templates — the same trust level WordPress itself grants administrators through **Appearance → Theme File Editor** — install this companion from GitHub.
+## What this plugin did
 
-How it executes: the substituted template is written to a content-hashed cache file under `wp-content/uploads/coywolf-custom-blocks/templates/` (protected by a `Deny from all` `.htaccess` and an `index.php`) and `include`d with output buffering. Identical templates share one cache file; editing a template produces a new hash; stale files are pruned after 30 days and the whole cache is removed on uninstall.
+A companion for [Coywolf Custom Blocks](https://github.com/coywolf-llc/custom-blocks) that ran PHP inside block templates on the server at render time.
 
-## Installation
+## If you still use it
 
-1. Install and activate [Coywolf Custom Blocks](https://github.com/coywolf-llc/custom-blocks) 1.0.70 or later.
-2. Go to the [latest release of this plugin](https://github.com/coywolf-llc/custom-blocks-php-templates/releases/latest) and download **`coywolf-custom-blocks-php-templates.zip`** under **Assets**.
-3. In WordPress, go to **Plugins → Add New → Upload Plugin**, upload the zip, and click Activate.
-
-Once installed, updates surface on **Dashboard → Updates** through the built-in GitHub self-updater (downloads restricted to GitHub-owned hosts).
-
-## Frequently Asked Questions
-
-### Who can write PHP templates?
-
-Editing a `coywolf_custom_block` post requires `manage_options` — the same capability that gates **Appearance → Theme File Editor**. Field *values* entered by post authors pass through `wp_kses_post()` and cannot introduce PHP; only the admin-authored template itself executes.
-
-### What happens if I deactivate or delete this plugin?
-
-Nothing breaks destructively: blocks whose templates contain PHP render an HTML comment explaining the companion is needed, and everything else renders normally. Block definitions live in the main plugin's data. Reinstalling the companion restores PHP rendering immediately. Uninstalling deletes this plugin's release-cache transients and the compiled-template cache directory.
-
-### Will this ever be on WordPress.org?
-
-No — executing database-stored PHP is precisely what the directory disallows. This companion exists so the main plugin can be compliant while this capability remains available from GitHub.
-
-## Privacy
-
-No analytics, no tracking, no data gathering. The only outbound request is `GET api.github.com/repos/coywolf-llc/custom-blocks-php-templates/releases/latest` for update checks.
-
-## Changelog
-
-### 1.0.2
-- Harden executor cache: direct-access guard + memoize cache dir (#4).
-
-### 1.0.1
-- Updater: run GitHub release checks in the background so the Updates screen never hangs (#3).
-
-### 1.0.0
-- Initial release: the PHP-template executor moved here from Coywolf Custom Blocks ≤ 1.0.69, hooked to the main plugin's `coywolf_custom_blocks_execute_php_template` filter. Same cache location, same trust model, same output.
+The last release, [v1.0.2](https://github.com/coywolf-llc/custom-blocks-php-templates/releases/tag/v1.0.2), is still available, but it won't get updates, security fixes or support. The code stays here under the GPL-2.0-or-later license.
